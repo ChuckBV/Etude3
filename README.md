@@ -15,9 +15,14 @@ statistics in biological research. 3rd ed. Freeman and Co., New York
 
 ### Y19-10-02-stat-demos
 
-"Riffs" on a series of commentaries in the American Entomologist in
+Creates a sample data set to examine the scenarios described by Dale 
+Spurgeon in American Entomol. 2019:16-18, "Common statistical mistakes in
+entomology: pseudoreplication
 
 ### Y20-02-05-stat-demos
+
+Uses actual data to demonstrate basic ANOVA techniques, using various
+web resources
 
 ## References and resources
 
