@@ -2,7 +2,9 @@
 # set_up_rcbd.R
 #
 # The package agricole provides randomization and set-up. It can probably
-# be done more simply and efficiently from base SAS and/or dplyr
+# be done more simply and efficiently from base R and/or dplyr
+#
+# Or... maybe reinventing the wheel isn't simple and efficient
 #
 #----------------------------------------------------------------------------
 
