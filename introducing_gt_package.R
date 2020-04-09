@@ -12,7 +12,7 @@ end_date <- "2010-06-14"
 
 # Create a gt table based on preprocessed
 # `sp500` table data
-sp500 %>%
+x <-  sp500 %>%
   dplyr::filter(date >= start_date & date <= end_date) %>%
   dplyr::select(-adj_close) %>%
   gt() %>%
@@ -32,3 +32,8 @@ sp500 %>%
     columns = vars(volume),
     suffixing = TRUE
   )
+
+sp500
+
+## Nice, yet still flextable + officer would be my first choice. Table 
+## formatting features seems the same but it offers easy export to .docx
