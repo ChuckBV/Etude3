@@ -33,7 +33,14 @@ x <-  sp500 %>%
     suffixing = TRUE
   )
 
-sp500
+## Me playing around--can save as image with ggsave()
+ggsave(sp500,
+       device = "png",
+       width = 2.83,
+       height = 2.21,
+       units = "in"
+) 
 
-## Nice, yet still flextable + officer would be my first choice. Table 
+##  From blog:
+### Nice, yet still flextable + officer would be my first choice. Table 
 ## formatting features seems the same but it offers easy export to .docx
