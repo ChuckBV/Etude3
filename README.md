@@ -24,6 +24,27 @@ entomology: pseudoreplication
 Uses actual data to demonstrate basic ANOVA techniques, using various
 web resources
 
+### Y20-02-09-plot-y-vs-datetime
+
+A challenge that comes up in my work.
+
+### Y20-02-28-set-up-rcbd
+
+Trying to re-invent the wheel, convinced myself that I need to understand
+R flow control, sytax, and list data structures better; and that it
+is more efficient to continue using agricolae
+
+### Y20-04-20-tables
+
+Starting trying to use gt package from the RStudio team, and then looked
+at methods of producing a table output (html, jpg, docx, etc) that are
+more efficient in the shortrun
+
+### Y20-05-12-automated-task
+
+
+
+
 ## References and resources
 
 ### OpenIntro
