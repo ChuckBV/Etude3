@@ -17,7 +17,8 @@ ggplot(df, aes(x = Month, y = AvgVisits)) +
   labs(x = "Month", y = "Average Visits per User") +
   scale_x_date(labels = date_format("%m-%Y"))
 
-templog <- read_csv("C:\\Users\\Charles.Burks\\Desktop\\chuck_larvae_tmptr_log_2020_01_30.csv")
+#templog <- read_csv("C:\\Users\\Charles.Burks\\Desktop\\chuck_larvae_tmptr_log_2020_01_30.csv")
+templog <- read_csv("./Y20-02-09-plot-y-vs-datetime/chuck_larvae_tmptr_log_2020_01_30.csv")
 
 templog$Reading2 <- mdy_hms(templog$Reading)
 
@@ -43,9 +44,12 @@ day.time1=as.POSIXct(day,format="%d/%m/%Y T %H:%M:%S",tz="Europe/Paris")
 day.time1
 
 day.time1$year
+# Error in day.time1$year : $ operator is invalid for atomic vectors
 
 day.time2=as.POSIXlt(day,format="%d/%m/%Y T %H:%M:%S",tz="Europe/Paris")
 
 day.time2
+# [1] "2016-10-26 19:51:30 CEST"
 
 day.time2$year
+# [1] 116
