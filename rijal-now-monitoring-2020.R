@@ -1,10 +1,16 @@
-# rijal-now-monitoring-2020.R
+#===========================================================================#
+# script1-data-cleaning.R
+#
+# Import data collected by Jhalendra Rijal in 2020 monitoring trials in 
+# presence and absence of mating disruption.
+#
+#===========================================================================#
 
 library(tidyverse)
 library(readxl)
 library(lubridate)
 
-### Recreate metadata for each of the three sites
+#-- 1. Recreate metadata for each of the three sites ------------------------
 MdTrt <- c("meso","gs")
 lure <- c("NOWL2L","NOWeggs","TrecePpoL2","TrecePpo","AlphaL2","Alpha","Peterson")
 
@@ -32,7 +38,8 @@ prefix <- "StdyWk"
 subscript <- 1:22
 wks <- paste0(prefix,subscript)
 
-### count data--extract from Excel spreadsheet
+#-- 2. Extract count data from Excel spreadsheet ----------------------------
+
 # counts_site1 <- read_excel(path = "C:/Users/Charles.Burks/OneDrive - USDA/_Current_projects/Analysis_Trap counts9.20.20.xlsx",
 #                            sheet = Sites[1],
 #                            range = "D2:Y57",
@@ -60,6 +67,7 @@ counts1 <- read_csv("counts_site1.csv")
 glimpse(counts1)
 counts1$StdyWk1 <- as.numeric(counts1$StdyWk1)
 
+#-- 3. Add count and metadata to recreate data sheet by site ----------------
 meta <- data.frame(MdTrt,lure,Rep)
 meta1 <- meta %>% 
   mutate(Site = Sites[1]) %>% 
@@ -101,3 +109,32 @@ Site3$StdyWk21 <- Site3$StdyWk20
 Site3$StdyWk20 <- Site3$StdyWk19
 Site3$StdyWk19 <- NA
 
+#-- 4. Combine data sets for all sites and save in tidy form  ---------------
+
+allsites <- rbind(Site1,Site2,Site3)
+
+### recode to tidy form
+allong <- allsites %>% 
+  pivot_longer(cols = 5:26,
+               names_to = "WkName",
+               values_to = "Count")
+
+### Merge in trap dates
+Dates2 <- Dates %>% 
+  mutate(WkName = paste0("StdyWk",StdyWk)) %>% 
+  select(c(5,2:4))
+Dates2
+
+allong2 <- left_join(Dates2,allong)
+
+head(allong2,3)
+
+
+allong3 <- allong2 %>% 
+  mutate(trapdate = as_date(ifelse(Site == "Hwy132",Hwy132,
+                                ifelse(Site == "Toomes",Toomes,Miller)))) %>% 
+  select(Site,MdTrt,lure,Rep,trapdate,Count) %>% 
+  arrange(Site,MdTrt,lure,Rep,trapdate,Count)
+allong3
+
+write.csv(allong,"y20-rijal-now-md-trapping.csv", row.names = FALSE)
