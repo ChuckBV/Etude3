@@ -32,25 +32,37 @@ prefix <- "StdyWk"
 subscript <- 1:22
 wks <- paste0(prefix,subscript)
 
-### count data
-counts_site1 <- read_excel(path = "C:/Users/Charles.Burks/OneDrive - USDA/_Current_projects/Analysis_Trap counts9.20.20.xlsx",
-                           sheet = Sites[1],
-                           range = "D2:Y57",
-                           col_names = wks)
-counts_site1
-write.csv(counts_site1,"counts_site1.csv", row.names = FALSE)
+### count data--extract from Excel spreadsheet
+# counts_site1 <- read_excel(path = "C:/Users/Charles.Burks/OneDrive - USDA/_Current_projects/Analysis_Trap counts9.20.20.xlsx",
+#                            sheet = Sites[1],
+#                            range = "D2:Y57",
+#                            col_names = wks)
+# counts_site1
+# write.csv(counts_site1,"counts_site1.csv", row.names = FALSE)
+# 
+# counts_site2 <- read_excel(path = "C:/Users/Charles.Burks/OneDrive - USDA/_Current_projects/Analysis_Trap counts9.20.20.xlsx",
+#                            sheet = Sites[2],
+#                            range = "D2:Y57",
+#                            col_names = wks)
+# counts_site2
+# write.csv(counts_site2,"counts_site2.csv", row.names = FALSE)
+# 
+# counts_site3 <- read_excel(path = "C:/Users/Charles.Burks/OneDrive - USDA/_Current_projects/Analysis_Trap counts9.20.20.xlsx",
+#                            sheet = Sites[3],
+#                            range = "D2:Y57",
+#                            col_names = wks)
+# counts_site3
+# write.csv(counts_site3,"counts_site3.csv", row.names = FALSE)
 
-counts_site2 <- read_excel(path = "C:/Users/Charles.Burks/OneDrive - USDA/_Current_projects/Analysis_Trap counts9.20.20.xlsx",
-                           sheet = Sites[2],
-                           range = "D2:Y57",
-                           col_names = wks)
-counts_site2
-write.csv(counts_site2,"counts_site2.csv", row.names = FALSE)
+### count data--put back together
+counts1 <- read_csv("counts_site1.csv")
+glimpse(counts1)
+counts1$StdyWk1 <- as.numeric(counts1$StdyWk1)
 
-counts_site3 <- read_excel(path = "C:/Users/Charles.Burks/OneDrive - USDA/_Current_projects/Analysis_Trap counts9.20.20.xlsx",
-                           sheet = Sites[3],
-                           range = "D2:Y57",
-                           col_names = wks)
-counts_site3
-write.csv(counts_site3,"counts_site3.csv", row.names = FALSE)
+meta <- data.frame(MdTrt,lure,Rep)
+meta1 <- meta %>% 
+  mutate(Site = Sites[1]) %>% 
+  select(c(4,1:3))
+meta1
 
+Site1 <- cbind(meta1,counts1)
