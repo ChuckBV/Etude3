@@ -55,6 +55,7 @@ wks <- paste0(prefix,subscript)
 # write.csv(counts_site3,"counts_site3.csv", row.names = FALSE)
 
 ### count data--put back together
+# counts1
 counts1 <- read_csv("counts_site1.csv")
 glimpse(counts1)
 counts1$StdyWk1 <- as.numeric(counts1$StdyWk1)
@@ -66,3 +67,16 @@ meta1 <- meta %>%
 meta1
 
 Site1 <- cbind(meta1,counts1)
+
+# counts2
+counts2 <- read_csv("counts_site2.csv")
+glimpse(counts2)
+counts2$StdyWk1 <- as.numeric(counts2$StdyWk1)
+
+#meta already created when importing site1
+meta2 <- meta %>% 
+  mutate(Site = Sites[2]) %>% 
+  select(c(4,1:3))
+meta2
+
+Site2 <- cbind(meta2,counts2)
