@@ -80,3 +80,24 @@ meta2 <- meta %>%
 meta2
 
 Site2 <- cbind(meta2,counts2)
+
+# counts3
+counts3 <- read_csv("counts_site3.csv")
+glimpse(counts3)
+#counts3$StdyWk1 <- as.numeric(counts3$StdyWk1)
+
+#meta already created when importing site1
+meta3 <- meta %>% 
+  mutate(Site = Sites[3]) %>% 
+  select(c(4,1:3))
+meta3
+
+Site3 <- cbind(meta3,counts3)
+
+### Fix so that correct week is missing in Site 3
+Site3$StdyWk22 <- Site3$StdyWk22
+Site3$StdyWk22 <- Site3$StdyWk21
+Site3$StdyWk21 <- Site3$StdyWk20
+Site3$StdyWk20 <- Site3$StdyWk19
+Site3$StdyWk19 <- NA
+
