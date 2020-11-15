@@ -144,23 +144,51 @@ csv_file_names %>%
 
 df_list_read2
 
-### One last question:
-### Can I simply make the list back into a data frame by coercing it?
-
-iris2 <- as.data.frame(df_list_read2)
-dim(iris2)
-# [1] 50 15
-# I was hoping for 150 by 5. This did closer to cbind instead of rbind
-
-(x <- rbind(wb_sheets))
-#            [,1]     [,2]         [,3]       
-# wb_sheets "setosa" "versicolor" "virginica"
-
-class(x)
-# [1] "matrix" "array"
-
-paste(wb_sheets, sep = ",", collapse = ",")
+#-- 3. Collapase a list of data frames --------------------------------------
 
 # https://itsalocke.com/blog/r-quick-tip-collapse-a-lists-of-data.frames-with-data.table/
 
-dt 
+myList <- list( p1 = iris[1:50,]
+                , p2 = iris[51:100,]
+                , p3 = iris[101:150,]
+                )
+myList
+class(myList)
+# [1] "list"
+
+## Looks different from the list above. Because it is a list of plain-vanilla
+## data frames rather than a list of tibbles, as above?
+
+### Simple collapse
+dt <- rbindlist(myList)
+
+dt ## Is this how data.frame does it? Cool!
+#      Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+#   1:          5.1         3.5          1.4         0.2    setosa
+#   2:          4.9         3.0          1.4         0.2    setosa
+#   3:          4.7         3.2          1.3         0.2    setosa
+#   4:          4.6         3.1          1.5         0.2    setosa
+#   5:          5.0         3.6          1.4         0.2    setosa
+# ---                                                            
+# 146:          6.7         3.0          5.2         2.3 virginica
+# 147:          6.3         2.5          5.0         1.9 virginica
+# 148:          6.5         3.0          5.2         2.0 virginica
+# 149:          6.2         3.4          5.4         2.3 virginica
+# 150:          5.9         3.0          5.1         1.8 virginica
+
+### Varying columns
+# If your data structure varies at all, you can use the arguments 
+# use.names and fill to combine the data.frames without an error. 
+# It will put columns on the RHS of the table as they appear within 
+# the list.
+
+# Here I remove the first column from the first part of our dataset 
+# to illustrate
+myList <- list( p1=iris[1:50, -1 ] , p2=iris[51:100,] , p3=iris[101:150,] )
+
+dt <- rbindlist(myList, use.names = TRUE, fill = TRUE, idcol = "myList")
+
+dt
+# Sepal.Length now appears on the right with NAs in p1/setosa
+# dt$myList shows the names (p1, p2, p3) of the data.frames in the 
+# list. 
