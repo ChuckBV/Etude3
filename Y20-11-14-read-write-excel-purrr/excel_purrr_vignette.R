@@ -6,6 +6,7 @@
 library(tidyverse)
 library(readxl)
 library(writexl)
+library(data.table) # line 164
 
 #-- 1. Write a data set as an Excel file and as csv files -------------------
 
@@ -161,3 +162,5 @@ class(x)
 paste(wb_sheets, sep = ",", collapse = ",")
 
 # https://itsalocke.com/blog/r-quick-tip-collapse-a-lists-of-data.frames-with-data.table/
+
+dt 
