@@ -160,4 +160,4 @@ class(x)
 
 paste(wb_sheets, sep = ",", collapse = ",")
 
-https://itsalocke.com/blog/r-quick-tip-collapse-a-lists-of-data.frames-with-data.table/
+# https://itsalocke.com/blog/r-quick-tip-collapse-a-lists-of-data.frames-with-data.table/
