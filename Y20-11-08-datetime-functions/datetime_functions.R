@@ -108,10 +108,10 @@ time_clock_at_tz(latimes, tz = "Atlantic/Cape_Verde", unit = "hours")
 
 #-- 2. Import datetime values from a data frame, convert -------------------
 ### Read in sample dates
-sample <- read_csv("./data/sample_datetimes2.csv",
+datetimes2 <- read_csv("./Y20-11-08-datetime-functions/sample_datetimes2.csv",
                    col_names = c("RowID","datetime_in"),
                    cols(RowID = "i", datetime_in = "T"))
-head(sample,3)
+head(datetimes2,3)
 # A tibble: 3 x 2
 #   RowID datetime_in        
 #   <int> <dttm>             
@@ -119,7 +119,7 @@ head(sample,3)
 # 2     2 2020-07-10 01:00:00
 # 3     3 2020-07-10 02:00:00
 
-str(sample$datetime_in[1:2])
+str(datetimes2$datetime_in[1:2])
 # POSIXct[1:2], format: "2020-07-10 00:00:00" "2020-07-10 01:00:00"
 
 ### The POSIXct class stores date/time values as the number of 
@@ -132,18 +132,18 @@ str(sample$datetime_in[1:2])
 ### It seems POSIXct is better for calculations, and POSIXlt
 ### is better if you want to pull elements from the datetime
 
-lubridate::tz(sample$datetime_in)
+lubridate::tz(datetimes2$datetime_in)
 #[1] "UTC"
 #-- UCT might be a default if no time zone information is given
 
-sample$datetime_in <- time_force_tz(sample$datetime_in, tz = "UTC")
+datetimes2$datetime_in <- time_force_tz(datetimes2$datetime_in, tz = "UTC")
 #-- belt and suspenders
 
-sample$pdt <- time_at_tz(sample$datetime_in, tz = "America/Los_Angeles")
+datetimes2$pdt <- time_at_tz(datetimes2$datetime_in, tz = "America/Los_Angeles")
 
-sample
+datetimes2
 # A tibble: 13 x 3
-# RowID datetime_in         pdt                
+#     RowID datetime_in         pdt                
 #    <int> <dttm>              <dttm>             
 # 1      1 2020-07-10 00:00:00 2020-07-09 17:00:00
 # 2      2 2020-07-10 01:00:00 2020-07-09 18:00:00
