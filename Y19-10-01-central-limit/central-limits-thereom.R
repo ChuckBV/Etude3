@@ -30,7 +30,7 @@ x3 <- x3[ ,2:3]
 colnames(x3) <- c("mm","cwt")
 
 ### Fly data as mm and number of observations
-mm <- x3 %>% 
+xmm <- x3 %>% 
   group_by(mm) %>% 
   summarise(Count = n())
 
@@ -41,7 +41,7 @@ milk <- x3 %>%
 milk
 
 ### Present fly and milk data sets as a vertical bar chart
-ggplot(mm, aes(x = mm, y = Count)) +
+ggplot(xmm, aes(x = mm, y = Count)) +
   geom_col()
 
 ggplot(milk, aes(x = cwt, y = Count)) +

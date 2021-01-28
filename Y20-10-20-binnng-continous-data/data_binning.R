@@ -3,9 +3,13 @@
 ### Data Binning and Plotting in R
 ### https://www.jdatalab.com/data_science_and_data_mining/2017/01/30/data-binning-plot.html
 
+### Shows how data binning can be accomplished with either the base function 
+### cut() or with dplyr::case_when(). The base function seems to accomplish
+### the same thing with cleaner code.
+
 library(tidyverse)
 
-data <- read_delim(file = "zipIncome.csv", delim = ',')
+data <- read_delim(file = "./Y20-10-20-binnng-continous-data/zipIncome.csv", delim = ',')
 v <- data %>% select(MeanEducation,MeanHouseholdIncome) #pick the variable 
 v
 
@@ -26,7 +30,7 @@ breaks <- c(0,2,4,6,8,10,12,14,16,18,20)
 tags <- c("[0-2)","[2-4)", "[4-6)", "[6-8)", "[8-10)", "[10-12)","[12-14)", "[14-16)","[16-18)", "[18-20)")
 
 # bucketing values into bins
-group_tags <- cut(v$MeanEducation, 
+group_tags <- cut(v$MeanEducation,  # cut is a base function
                   breaks=breaks, 
                   include.lowest=TRUE, 
                   right=FALSE, 
@@ -46,6 +50,7 @@ ggplot(data = as_tibble(group_tags), mapping = aes(x=value)) +
   theme_minimal() 
 
 ## Second plot of income by education
+## Using dplyr::case_when
 v <- data %>% select(MeanEducation,MeanHouseholdIncome) #pick the variable 
 vgroup <- as_tibble(v) %>% 
   mutate(tag = case_when(
