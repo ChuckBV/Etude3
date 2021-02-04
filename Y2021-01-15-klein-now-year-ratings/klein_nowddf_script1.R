@@ -91,9 +91,10 @@ p1 <- ggplot() +
   geom_line(data = ddf_tranq_5yr, 
             aes(x = julian, y = accumulated_dd, 
                 group = factor(yr), colour = now_dmg)) +
-  geom_text(data = date_jul, aes(x = Yday, y = 0, label = Date))
+  geom_text(data = date_jul, aes(x = Yday, y = 0, label = Date)) + 
+  geom_vline(data = date_jul, aes(xintercept = Yday))
 
-p1 + geom_vline(data = date_jul, aes(xintercept = Yday))
+p1
 
 ggsave("./Y2021-01-15-klein-now-year-ratings/now_ddf_tranq_y16_to_y20.jpg",
        plot = p1,
