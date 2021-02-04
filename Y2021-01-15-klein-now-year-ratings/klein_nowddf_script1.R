@@ -74,10 +74,21 @@ write.csv(ddf_tranq_5yrr,
 ddf_tranq_5yr <- ddf_tranq_5yr %>% 
   mutate(now_dmg = ifelse(yr < 2018,"heavy","light"))
 
+fday <- as.Date(c("2020-04-01","2020-05-01","2020-06-01","2020-07-01","2020-08-01","2020-09-01","2020-10-01"))
+Date <- c("1-Apr","1-May","1-Jun","1-Jul","1-Aug","1-Sep","1-Oct")
+Yday <- yday(fday)
+fday
+Yday
+
+date_jul <- data.frame(Date,Yday)
+date_jul
+
   
 ###
-p1 <- ggplot(data = ddf_tranq_5yr, aes(x = julian, y = accumulated_dd, group = factor(yr), colour = now_dmg)) +
-  geom_line()  
+p1 <- ggplot() +
+  geom_line(data = ddf_tranq_5yr, aes(x = julian, y = accumulated_dd, group = factor(yr), colour = now_dmg))  
+
+p1 <- p1 + geom_text(data = date_jul, aes(x = Yday, y = 0, label = Date))
 
 p1
 
