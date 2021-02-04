@@ -14,7 +14,7 @@ library(data.table)
 #-- 1. Upload NOW degree-day data for study period --------------------------
 
 ### Find and list csv files for windrow damage
-my_path <- "./Y2021-01-15-klein-now-year-ratings/"
+# my_path <- "./Y2021-01-15-klein-now-year-ratings/"
 (csv_files <-  list.files(my_path, pattern = ".csv")) # 34 files
 (cimis_files <- csv_files[str_detect(csv_files,"ddf")]) # 11 files
 # [1] "ddf_2016.csv" "ddf_2017.csv" "ddf_2018.csv" "ddf_2019.csv" "ddf_2020.csv"
@@ -33,7 +33,7 @@ ddf_2016 <- clean_names(ddf_2016)
 ddf_2016
 
 ddnames <- colnames(ddf_2016)
-# get good column names w janitor::clean_names() and store in vector
+  # get good column names w janitor::clean_names() and store in vector
 
 ### Impose column names on df for each year
 colnames(ddf_2017) <- ddnames
@@ -66,10 +66,12 @@ ddf_tranq_5yr
 ddf_tranq_5yr$date <- as.Date(mdy(ddf_tranq_5yr$date))
 ddf_tranq_5yr$yr <- year(ddf_tranq_5yr$date)
 ddf_tranq_5yr$julian <- yday(ddf_tranq_5yr$date)
+ 
+write.csv(ddf_tranq_5yr,
+         "./Y2021-01-15-klein-now-year-ratings/now_deg_days_f_tranquility_2016_to_2020.csv",
+         row.names = FALSE)
 
-write.csv(ddf_tranq_5yrr,
-          "./Y2021-01-15-klein-now-year-ratings/now_deg_days_f_tranquility_2016_to_2020.csv",
-          row.names = FALSE)
+ddf_tranq_5yr <- read.csv("./Y2021-01-15-klein-now-year-ratings/now_deg_days_f_tranquility_2016_to_2020.csv")
 
 ddf_tranq_5yr <- ddf_tranq_5yr %>% 
   mutate(now_dmg = ifelse(yr < 2018,"heavy","light"))
@@ -86,13 +88,14 @@ date_jul
   
 ###
 p1 <- ggplot() +
-  geom_line(data = ddf_tranq_5yr, aes(x = julian, y = accumulated_dd, group = factor(yr), colour = now_dmg))  
+  geom_line(data = ddf_tranq_5yr, 
+            aes(x = julian, y = accumulated_dd, 
+                group = factor(yr), colour = now_dmg)) +
+  geom_text(data = date_jul, aes(x = Yday, y = 0, label = Date))
 
-p1 <- p1 + geom_text(data = date_jul, aes(x = Yday, y = 0, label = Date))
+p1 + geom_vline(data = date_jul, aes(xintercept = Yday))
 
-p1
-
-ggsave("now_ddf_tranq_y16_to_y20.jpg",
+ggsave("./Y2021-01-15-klein-now-year-ratings/now_ddf_tranq_y16_to_y20.jpg",
        plot = p1,
        device = "jpeg",
        width =  5.83,
