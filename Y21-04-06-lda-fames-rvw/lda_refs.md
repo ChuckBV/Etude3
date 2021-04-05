@@ -1,4 +1,13 @@
-# pcaMethods (R package)
+# References and resources for LDA
+
+How to perform linear discriminate analysis in R
+
+## Packages and libraries
+
+## The ususals
+ - 
+
+### pcaMethods (R package)
 
 https://www.rdocumentation.org/packages/pcaMethods/versions/1.64.0
 
