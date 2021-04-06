@@ -1,10 +1,11 @@
 #===========================================================================#
-# fames-script1_lda_vs_pca.R
+# fames-script3_lda_vs_pca_now_fames.R
 #
-# Direct copy of vignette from
-# https://gist.github.com/thigm85/8424654, pointed to in
-# https://www.r-bloggers.com/2014/01/computing-and-visualizing-lda-in-r/,
-# Thank you Thiago G. Martins!
+# Use Martins code with NOW Fames dataset
+#
+# 1. Perform and annotate PCA
+# 2. Perform and annotate LDA
+# 3. Graphical comparisons of PCA and LDA
 #
 #===========================================================================#
 
@@ -12,6 +13,8 @@ require(MASS)
 require(ggplot2)
 require(scales)
 require(gridExtra)
+
+#-- 1. Perform and annotate PCA ---------------------------------------------
 
 pca <- prcomp(iris[,-5], # drops Species, all numeric data frame
               center = TRUE,
@@ -50,10 +53,12 @@ prop.pca = pca$sdev^2/sum(pca$sdev^2)
 prop.pca
 # [1] 0.729624454 0.228507618 0.036689219 0.005178709
 
-##
+#-- 2. Perform and annotate LDA ---------------------------------------------
+
 lda <- MASS::lda(Species ~ ., 
                  iris, 
                  prior = c(1,1,1)/3)
+# lda is a list of 10 objects
 
 prop.lda = lda$svd^2/sum(lda$svd^2)
 prop.lda
@@ -62,18 +67,31 @@ prop.lda
 plda <- predict(object = lda,
                 newdata = iris) # plda is a list of three objects
 
-head(plda$class) # Factor w/ 3 levels "setosa", "versicolor", "virgnica"
+plda$class # factor w 3 levels, 150 obs
 
+head(plda$posterior,2) # posterior prob. by classification
+#   setosa   versicolor    virginica
+# 1      1 3.896358e-22 2.611168e-42
+# 2      1 7.217970e-18 5.042143e-37
 
-dataset = data.frame(species = iris[,"Species"],
+head(plda$x) # score on two axes
+#        LD1        LD2
+# 1 8.061800  0.3004206
+# 2 7.128688 -0.7866604
+
+#-- 3. Graphical comparisons of PCA and LDA -----------------------------------
+
+dataset = data.frame(species = iris[,"Species"], # take single col frm src dat
                      pca = pca$x, lda = plda$x)
 
 p1 <- ggplot(dataset) + geom_point(aes(lda.LD1, lda.LD2, colour = species, shape = species), size = 2.5) + 
   labs(x = paste("LD1 (", percent(prop.lda[1]), ")", sep=""),
        y = paste("LD2 (", percent(prop.lda[2]), ")", sep=""))
+p1
 
 p2 <- ggplot(dataset) + geom_point(aes(pca.PC1, pca.PC2, colour = species, shape = species), size = 2.5) +
   labs(x = paste("PC1 (", percent(prop.pca[1]), ")", sep=""),
        y = paste("PC2 (", percent(prop.pca[2]), ")", sep=""))
+p2
 
 grid.arrange(p1, p2)
