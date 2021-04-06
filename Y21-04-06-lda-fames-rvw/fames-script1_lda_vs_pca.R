@@ -1,0 +1,79 @@
+#===========================================================================#
+# fames-script1_lda_vs_pca.R
+#
+# Direct copy of vignette from
+# https://gist.github.com/thigm85/8424654, pointed to in
+# https://www.r-bloggers.com/2014/01/computing-and-visualizing-lda-in-r/,
+# Thank you Thiago G. Martins!
+#
+#===========================================================================#
+
+require(MASS)
+require(ggplot2)
+require(scales)
+require(gridExtra)
+
+pca <- prcomp(iris[,-5], # drops Species, all numeric data frame
+              center = TRUE,
+              scale. = TRUE) 
+## prcomp is base R. pca is a list with 5 objects
+
+pca$sdev # num [1:4]
+# [1] 1.7083611 0.9560494 0.3830886 0.1439265
+
+pca$rotation #num, 1:4, 1:4]
+#                     PC1         PC2        PC3        PC4
+# Sepal.Length  0.5210659 -0.37741762  0.7195664  0.2612863
+# Sepal.Width  -0.2693474 -0.92329566 -0.2443818 -0.1235096
+# Petal.Length  0.5804131 -0.02449161 -0.1421264 -0.8014492
+# Petal.Width   0.5648565 -0.06694199 -0.6342727  0.5235971
+
+pca$center # Named num [1:4]
+# Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+#     5.843333     3.057333     3.758000     1.199333
+
+pca$scale #  Named num [1:4]
+# Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+#    0.8280661    0.4358663    1.7652982    0.7622377 
+
+head(pca$x,3) # num [1:150]
+#            PC1        PC2         PC3          PC4
+# [1,] -2.257141 -0.4784238  0.12727962  0.024087508
+# [2,] -2.074013  0.6718827  0.23382552  0.102662845
+# [3,] -2.356335  0.3407664 -0.04405390  0.028282305
+# [4,] -2.291707  0.5953999 -0.09098530 -0.065735340
+# [5,] -2.381863 -0.6446757 -0.01568565 -0.035802870
+# [6,] -2.068701 -1.4842053 -0.02687825  0.006586116
+
+## Proportion of between-class variance by components
+prop.pca = pca$sdev^2/sum(pca$sdev^2)
+prop.pca
+# [1] 0.729624454 0.228507618 0.036689219 0.005178709
+
+##
+lda <- MASS::lda(Species ~ ., 
+                 iris, 
+                 prior = c(1,1,1)/3)
+
+prop.lda = lda$svd^2/sum(lda$svd^2)
+prop.lda
+# [1] 0.991212605 0.008787395
+
+plda <- predict(object = lda,
+                newdata = iris) # plda is a list of three objects
+
+head(plda$class) # Factor w/ 3 levels "setosa", "versicolor", "virgnica"
+
+
+dataset = data.frame(species = iris[,"Species"],
+                     pca = pca$x, lda = plda$x)
+
+p1 <- ggplot(dataset) + geom_point(aes(lda.LD1, lda.LD2, colour = species, shape = species), size = 2.5) + 
+  labs(x = paste("LD1 (", percent(prop.lda[1]), ")", sep=""),
+       y = paste("LD2 (", percent(prop.lda[2]), ")", sep=""))
+
+p2 <- ggplot(dataset) + geom_point(aes(pca.PC1, pca.PC2, colour = species, shape = species), size = 2.5) +
+  labs(x = paste("PC1 (", percent(prop.pca[1]), ")", sep=""),
+       y = paste("PC2 (", percent(prop.pca[2]), ")", sep=""))
+
+grid.arrange(p1, p2)
