@@ -1,0 +1,11 @@
+CmpdID,cmpd_label,fa_name,formula
+1,C1,Myristate,C14:0
+2,C2,Palmitate,C16:0
+3,C3,Palmitolenoate,C16:1
+4,C4,Sterate,C18:0
+5,C5,Oleate,C18:1
+6,C6,Linoleate,C18:2
+7,C7,Linolenate,C18:3
+8,C8,Arachidate,C20:0
+9,C9,Eicosenate,C20:1
+10,C10,Eicosapentaenoate,C20:5
