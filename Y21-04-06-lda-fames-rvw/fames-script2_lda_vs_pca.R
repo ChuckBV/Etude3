@@ -1,5 +1,5 @@
 #===========================================================================#
-# fames-script1_lda_vs_pca.R
+# fames-script2_lda_vs_pca.R
 #
 # Direct copy of vignette from
 # https://gist.github.com/thigm85/8424654, pointed to in
@@ -84,7 +84,7 @@ head(plda$x) # score on two axes
 
 #-- 3. Graphical comparisons of PCA and LDA -----------------------------------
 
-dataset = data.frame(species = iris[,"Species"], # take single col frm src dat
+dataset = data.frame(species = stds[,"Host"], # take single col frm src dat
                      pca = pca$x, lda = plda$x)
 
 p1 <- ggplot(dataset) + geom_point(aes(lda.LD1, lda.LD2, colour = species, shape = species), size = 2.5) + 
@@ -97,5 +97,9 @@ p2 <- ggplot(dataset) + geom_point(aes(pca.PC1, pca.PC2, colour = species, shape
        y = paste("PC2 (", percent(prop.pca[2]), ")", sep=""))
 p2
 
-grid.arrange(p1, p2)
+x <- grid.arrange(p1, p2)
 
+ggsave("x.jpg", 
+       plot = x, 
+       device = "jpg", 
+       path = "C:/Users/Charles.Burks/my_git/Etude3/Y21-04-06-lda-fames-rvw")

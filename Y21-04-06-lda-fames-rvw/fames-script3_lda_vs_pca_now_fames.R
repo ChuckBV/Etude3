@@ -94,4 +94,8 @@ p2 <- ggplot(dataset) + geom_point(aes(pca.PC1, pca.PC2, colour = species, shape
        y = paste("PC2 (", percent(prop.pca[2]), ")", sep=""))
 p2
 
-grid.arrange(p1, p2)
+x <- grid.arrange(p1, p2)
+ggsave("x.jpg", plot = x, device = "jpg", path = "C:/Users/Charles.Burks/Desktop/")
+# from gridExtra. Not clear how to save this
+# http://www.sthda.com/english/articles/24-ggpubr-publication-ready-plots/81-ggplot2-easy-way-to-mix-multiple-graphs-on-the-same-page/
+# https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html
