@@ -1,5 +1,5 @@
 #===========================================================================#
-# fames-script4_lda_vs_pca_now_fames.R
+# fames-script4_lda_vs_pca_now_figs.R
 #
 # Use Martins code with NOW Fames dataset. This time with NOW from lab
 # tree nut sources, not from iris data set
@@ -16,16 +16,18 @@ require(scales) # Scales is installed when you install ggplot2 or the tidyverse
 require(gridExtra) # for grid.arrange()
 
 stds <- read.csv("Y21-04-06-lda-fames-rvw/stds_all_now.csv")
-stds_nuts <- stds[stds$Host != "Fig", ]
+stds_fig <- stds[stds$Host != "Pistachio", ]
 
-head(stds_nuts,2)
+head(stds_fig,2)
 #     Host    C1     C2    C3    C4     C5     C6    C7    C8 C9 C10
 # 1 Almond 0.162 14.192 0.472 5.985 48.372 29.147 1.672 0.000  0   0
 # 2 Almond 0.245 23.799 1.092 4.577 43.573 22.443 4.163 0.115  0   0
 
+unique(stds_fig$Host)
+
 #-- 1. Perform and annotate PCA ---------------------------------------------
 
-pca <- prcomp(stds_nuts[,-1], # drops Species, all numeric data frame
+pca <- prcomp(stds_fig[,-1], # drops Species, all numeric data frame
               center = TRUE,
               scale. = TRUE) 
 
@@ -38,28 +40,28 @@ prop.pca
 #-- 2. Perform and annotate LDA ---------------------------------------------
 
 lda <- MASS::lda(Host ~ ., 
-                 stds_nuts)
+                 stds_fig)
 
 prop.lda = lda$svd^2/sum(lda$svd^2)
 prop.lda
 # [1] 0.91130801 0.08869199
 
 plda <- predict(object = lda,
-                newdata = stds_nuts) # plda is a list of three objects
+                newdata = stds_fig) # plda is a list of three objects
 
 
 
 #-- 3. Graphical comparisons of PCA and LDA -----------------------------------
 
-dataset = data.frame(Host = stds_nuts[,"Host"], # take single col frm src dat
+dataset = data.frame(species = stds_fig[,"Host"], # take single col frm src dat
                      pca = pca$x, lda = plda$x)
 
-p1 <- ggplot(dataset) + geom_point(aes(lda.LD1, lda.LD2, colour = Host, shape = Host), size = 2.5) + 
+p1 <- ggplot(dataset) + geom_point(aes(lda.LD1, lda.LD2, colour = species, shape = species), size = 2.5) + 
   labs(x = paste("LD1 (", percent(prop.lda[1]), ")", sep=""),
        y = paste("LD2 (", percent(prop.lda[2]), ")", sep=""))
 p1
 
-p2 <- ggplot(dataset) + geom_point(aes(pca.PC1, pca.PC2, colour = Host, shape = Host), size = 2.5) +
+p2 <- ggplot(dataset) + geom_point(aes(pca.PC1, pca.PC2, colour = species, shape = species), size = 2.5) +
   labs(x = paste("PC1 (", percent(prop.pca[1]), ")", sep=""),
        y = paste("PC2 (", percent(prop.pca[2]), ")", sep=""))
 p2
