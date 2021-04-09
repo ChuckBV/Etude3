@@ -1,5 +1,5 @@
 #===========================================================================#
-# fames-script4_lda_vs_pca_now_figs.R
+# fames-script6_lda_vs_pca_now_figs.R
 #
 # Use Martins code with NOW Fames dataset. This time with NOW from lab
 # tree nut sources, not from iris data set
