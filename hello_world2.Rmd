@@ -1,0 +1,36 @@
+---
+title: "My Hello World"
+author: "Jenny  Bryant"
+date: "5/18/2021"
+output: 
+  html_document:
+    keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+Trying on my own. Working with the iris data set and tidyverse. Start with loading tidyverse and examining the structure of the iris data set.
+
+```{r iris}
+library(tidyverse)
+str(iris)
+```
+
+Now head the iris data set.
+
+```{r}
+head(iris,2)
+```
+
+Now use dplyr to get summary information
+
+```{r}
+iris %>% 
+  group_by(Species) %>% 
+  summarise(nObs = n(),
+            Sepal.Length = mean(Sepal.Length, na.rm = TRUE),
+            Sepal.Width = mean(Sepal.Width, na.rm = TRUE))
+
+```
